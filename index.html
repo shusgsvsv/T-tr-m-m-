@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Cấu Hình Tool</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background: white;
+      padding: 20px 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      max-width: 350px;
+    }
+    .status {
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .status span.online {
+      color: green;
+      font-weight: bold;
+    }
+    .rainbow {
+      font-weight: bold;
+      animation: rainbow 2s linear infinite;
+    }
+    @keyframes rainbow {
+      0%   { color: red; }
+      14%  { color: orange; }
+      28%  { color: yellow; }
+      42%  { color: green; }
+      57%  { color: cyan; }
+      71%  { color: blue; }
+      85%  { color: violet; }
+      100% { color: red; }
+    }
+    .time {
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+    .toggle-group {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 10px 0;
+    }
+    .toggle-group label {
+      flex: 1;
+    }
+    .toggle-switch {
+      position: relative;
+      width: 40px;
+      height: 20px;
+    }
+    .toggle-switch input {
+      display: none;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0;
+      right: 0; bottom: 0;
+      background-color: #ccc;
+      transition: 0.4s;
+      border-radius: 20px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 14px;
+      width: 14px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: #4CAF50;
+    }
+    input:checked + .slider:before {
+      transform: translateX(20px);
+    }
+    .footer {
+      margin-top: 20px;
+      font-size: 12px;
+      text-align: center;
+    }
+    .message {
+      font-size: 13px;
+      color: #333;
+      margin-top: 5px;
+      display: none;
+    }
+    .spinner {
+      border: 2px solid #f3f3f3;
+      border-top: 2px solid #555;
+      border-radius: 50%;
+      width: 12px;
+      height: 12px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      margin-left: 5px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="status">
+      <span class="online">Trạng thái: Online</span>
+      <span class="rainbow" id="fps">60 FPS</span>
+    </div>
+    <div class="time">Thời gian: 17:00:38</div>
+
+    <div class="toggle-group">
+      <label>Unlock Cấu Hình</label>
+      <label class="toggle-switch">
+        <input type="checkbox" onclick="handleToggle(this, 'Unlock Cấu Hình')">
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="message" id="msg1"></div>
+
+    <div class="toggle-group">
+      <label>Tối Ưu Cấu Hình</label>
+      <label class="toggle-switch">
+        <input type="checkbox" onclick="handleToggle(this, 'Tối Ưu Cấu Hình')">
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="message" id="msg2"></div>
+
+    <div class="toggle-group">
+      <label>Fix Cấu Hình Lỗi</label>
+      <label class="toggle-switch">
+        <input type="checkbox" onclick="handleToggle(this, 'Fix Cấu Hình Lỗi')">
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="message" id="msg3"></div>
+
+    <div class="toggle-group">
+      <label>Nhẹ Tâm</label>
+      <label class="toggle-switch">
+        <input type="checkbox" onclick="handleToggle(this, 'Nhẹ Tâm')">
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="message" id="msg4"></div>
+
+    <div class="toggle-group">
+      <label>Block Hust</label>
+      <label class="toggle-switch">
+        <input type="checkbox" onclick="handleToggle(this, 'Block Hust')">
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="message" id="msg5"></div>
+
+    <div class="toggle-group">
+      <label>FF</label>
+      <label class="toggle-switch">
+        <input type="checkbox" onclick="handleToggle(this, 'FF')">
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="message" id="msg6"></div>
+
+    <div class="footer rainbow">
+      Make Config By Quang Lâm
+    </div>
+  </div>
+
+  <script>
+    const fpsEl = document.getElementById('fps');
+    let fps = 60;
+    setInterval(() => {
+      fps = fps === 60 ? 59 : 60;
+      fpsEl.textContent = `${fps} FPS`;
+    }, 1000);
+
+    function handleToggle(checkbox, feature) {
+      const index = Array.from(document.querySelectorAll("input[type=checkbox]")).indexOf(checkbox) + 1;
+      const msg = document.getElementById(`msg${index}`);
+      msg.style.display = "block";
+      msg.innerHTML = `Đang ${feature}... <span class="spinner"></span>`;
+      setTimeout(() => {
+        msg.innerHTML = `${feature} thành công!`;
+      }, 2000);
+    }
+  </script>
+</body>
+</html>
